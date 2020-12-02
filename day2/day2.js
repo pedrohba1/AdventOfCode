@@ -21,4 +21,34 @@ lines.forEach((line) =>{
     
 }) 
 
-console.log(count);
+
+//part 2 
+// part 1
+
+validCounter = 0;
+lines.forEach((line) =>{
+    var [pswdInfo, pswd] = line.split(':')
+    var [position1, position2, letter] = pswdInfo.split(/[- ]/)
+
+    const regex =  new RegExp(letter,'g');
+
+    var positionsArray =[]
+    while(match = regex.exec(pswd)){
+        positionsArray.push(match.index);
+    }
+       if(positionsArray.includes(Number(position1)) && !positionsArray.includes(Number(position2))){
+        validCounter = validCounter +1;
+       }
+    
+       if(!positionsArray.includes(Number(position1)) && positionsArray.includes(Number(position2))){
+        validCounter = validCounter +1;
+       }
+
+
+}) 
+
+
+console.log(validCounter)
+
+
+
