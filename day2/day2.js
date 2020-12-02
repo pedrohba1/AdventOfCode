@@ -23,8 +23,6 @@ lines.forEach((line) =>{
 
 
 //part 2 
-// part 1
-
 validCounter = 0;
 lines.forEach((line) =>{
     var [pswdInfo, pswd] = line.split(':')
@@ -43,12 +41,12 @@ lines.forEach((line) =>{
        if(!positionsArray.includes(Number(position1)) && positionsArray.includes(Number(position2))){
         validCounter = validCounter +1;
        }
-
-
 }) 
 
-
 console.log(validCounter)
+
+
+
 
 
 
