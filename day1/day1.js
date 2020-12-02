@@ -4,6 +4,8 @@ const data = fs.readFileSync('input.txt', 'utf8')
 const lines = data.split(/\r?\n/);
 
 
+ // no need to optimise if it doesn't give me any advantage. O(n^3) it is.
+
 //part 1
 
 lines.forEach((line) =>{
@@ -22,7 +24,7 @@ lines.forEach((line) =>{
 
 //part 2
 lines.forEach((line) =>{
-    lines.forEach((lineSec) =>{        
+    lines.forEach((lineSec) =>{            
         lines.forEach((lineTerc) =>{            
             mul = line*lineSec*lineTerc;
             sum = Number(line) + Number(lineSec) + Number(lineTerc)
