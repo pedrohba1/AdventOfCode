@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "esm": "^3.2.25",
+    "fs": "^0.0.1-security"
+  }
+}
