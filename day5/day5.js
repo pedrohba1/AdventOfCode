@@ -4,18 +4,19 @@ var fs = require('fs')
 const input = fs.readFileSync('input.txt', 'utf8')
 var passes =  input.split('\n');
 
-function search (min,max,codes){
-    const code = codes[0];
-    const mid = min + ((max - min) /2);
-    const useTop = code === 'B' || code === 'R';
+const search  = (min, max, pass) => {
+    var upper = 127;
+    var lower = 0;
 
-    let newMin = useTop ? Math.ceil(mid) : min;
-    let newMax = useTop ? max : Math.floor(mid);
-
-    if(codes.length ===1) return useTop ? newMax : newMin;
-     else return search(newMin, newMax, codes.slice(1));
+    [...pass].forEach(letter => {
+        console.log(letter);
+        mid = min + ((max - min) /2);
+        useTop = letter === 'B' || letter === 'R';
+        min = useTop ? Math.ceil(mid) : min; 
+        max = useTop ? max : Math.floor(mid);
+    });
+    return min;
 }
-
 
 const ids = passes.map(pass =>{
     const row = search(0,127, pass.slice(0,7));
@@ -23,5 +24,6 @@ const ids = passes.map(pass =>{
     return (row*8 ) + column;
 })
 
+// part 1
 const highestId = Math.max(...ids);
 console.log(highestId);
