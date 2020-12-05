@@ -9,7 +9,6 @@ const search  = (min, max, pass) => {
     var lower = 0;
 
     [...pass].forEach(letter => {
-        console.log(letter);
         mid = min + ((max - min) /2);
         useTop = letter === 'B' || letter === 'R';
         min = useTop ? Math.ceil(mid) : min; 
@@ -27,3 +26,18 @@ const ids = passes.map(pass =>{
 // part 1
 const highestId = Math.max(...ids);
 console.log(highestId);
+
+
+ids.sort((a,b) => b -a);
+
+ids.some((id, i) =>{
+    if(id !== highestId -i){
+       myId = highestId -i;
+        return true;
+    }
+    return false;
+})
+
+
+
+console.log(myId)
