@@ -1,4 +1,4 @@
-const forms = require("fs").readFileSync("input.txt", "utf8").split("\n\n");
+const forms = require("fs").readFileSync("input.txt", "utf8").split("\n");
 var textByLine = forms.map(x => x.split("\n"));
 
 
@@ -10,7 +10,7 @@ console.log(part1)
 
 
 function part2(textByLine) {
-    var numberOfYeses = 0;
+    var yesCount = 0;
     textByLine.forEach(group => {
         var originalArray = group[0].split("");
         for (let i = 1; i < group.length; i++) {
@@ -22,9 +22,9 @@ function part2(textByLine) {
                 }
             })
         }
-        numberOfYeses += originalArray.length;
+        yesCount += originalArray.length;
     });
-    return numberOfYeses;
+    return yesCount;
 }
 
 console.log(part2(textByLine));
