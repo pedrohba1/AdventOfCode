@@ -4,4 +4,4 @@
 
 src/main.rs:
 
-# env-dep:CLIPPY_ARGS=
+# env-dep:CLIPPY_ARGS=--no-deps__CLIPPY_HACKERY__
