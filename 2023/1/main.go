@@ -2,42 +2,33 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strconv"
 	"unicode"
 )
 
 func main() {
-	file, err := os.Open("./input.txt")
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
-	}
-
+	file, _ := os.Open("./input.txt")
 	scanner := bufio.NewScanner(file)
 	acc := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Println(line)
 
-		firstDigit := ""
-		lastDigit := ""
+		first := ""
+		last := ""
 
 		for i := 0; i < len(line); i++ {
 			letter := (line[i])
 			if unicode.IsNumber(rune(letter)) {
 				digit := string(letter)
-
-				if firstDigit == "" {
-					firstDigit = digit
+				if first == "" {
+					first = digit
 				}
-
-				lastDigit = digit
+				last = digit
 			}
 
 		}
-		result, _ := strconv.Atoi(firstDigit + lastDigit)
+		result, _ := strconv.Atoi(first + last)
 		acc += result
 	}
 
