@@ -82,5 +82,5 @@ func main() {
 			acc += game.Id
 		}
 	}
-	fmt.Println(acc)
+	fmt.Print(acc)
 }
