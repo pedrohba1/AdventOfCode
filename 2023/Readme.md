@@ -11,5 +11,7 @@ It's O(m*n), both parts. While part 2 being slightly worse because of indexing.
 
 ### day 2
 
+Day two is also pretty simple. loop over n lines, loop over each line to find s sets. Complexity is
+O(n*s)
 
 

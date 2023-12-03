@@ -14,3 +14,12 @@ day2:
 	@echo "--- part 2 ---"
 	@cd 2/part2 && go run main.go
 
+day3:
+	@echo "--- day 3 solution ---"
+	@echo "--- part 1 ---"
+	@cd 3/part1/ && go run main.go
+	@echo ""
+	@echo "--- part 2 ---"
+	@cd 3/part2 && go run main.go
+
+
