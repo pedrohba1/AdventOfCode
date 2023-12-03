@@ -22,7 +22,6 @@ func parseGame(line string) Game {
 	gameRe := regexp.MustCompile(`(\d+ \w+)`)
 	textRe := regexp.MustCompile(`red|blue|green`)
 	numberRe := regexp.MustCompile(`\d+`)
-	fmt.Println(line)
 
 	parts := strings.Split(line, ":")
 	id, _ := strconv.Atoi(numberRe.FindString(parts[0]))
@@ -41,8 +40,6 @@ func parseGame(line string) Game {
 			Colors: make(map[string]int),
 		}
 
-		fmt.Println("strings: ")
-		fmt.Println(strElem)
 		sets := gameRe.FindAllString(strElem, -1)
 
 		for _, elem := range sets {
@@ -54,6 +51,15 @@ func parseGame(line string) Game {
 	}
 
 	return game
+}
+
+func validSets(game Game) bool {
+	for _, set := range game.Sets {
+		if set.Colors["red"] > 12 || set.Colors["green"] > 13 || set.Colors["blue"] > 14 {
+			return false
+		}
+	}
+	return true
 }
 
 func main() {
@@ -72,7 +78,9 @@ func main() {
 		line := scanner.Text()
 
 		game := parseGame(line)
-		fmt.Println(game.Sets)
+		if validSets(game) {
+			acc += game.Id
+		}
 	}
 	fmt.Println(acc)
 }
