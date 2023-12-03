@@ -9,6 +9,8 @@ import (
 
 func main() {
 	file, _ := os.Open("../input.txt")
+	defer file.Close()
+
 	scanner := bufio.NewScanner(file)
 	acc := 0
 	for scanner.Scan() {
@@ -33,5 +35,4 @@ func main() {
 	}
 
 	print(acc)
-	defer file.Close()
 }
