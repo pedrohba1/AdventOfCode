@@ -23,3 +23,11 @@ day3:
 	@cd 3/part2 && go run main.go
 
 
+day4:
+	@echo "--- day 4 solution ---"
+	@echo "--- part 1 ---"
+	@cd 4/part1/ && go run main.go
+	@echo ""
+	@echo "--- part 2 ---"
+	@cd 4/part2 && go run main.go
+
