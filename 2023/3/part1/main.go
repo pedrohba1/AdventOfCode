@@ -23,7 +23,9 @@ type Position struct {
 func findSpecialChars(line []rune) []Pair {
 	var pairs []Pair
 	for idx, r := range line {
-		if !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '.' {
+		if !unicode.IsLetter(r) &&
+			!unicode.IsDigit(r) &&
+			r != '.' {
 			pair := Pair{idx: idx, r: r}
 			pairs = append(pairs, pair)
 		}
@@ -85,7 +87,6 @@ func fulfillNumber(p *Position, lines [][]rune) {
 }
 
 func calcSquare(i, j int, lines [][]rune) int {
-
 	var toExpand []Position
 	for _, p := range []Position{
 		{i: i + 1, j: j + 1, r: lines[i+1][j+1]},
@@ -101,21 +102,16 @@ func calcSquare(i, j int, lines [][]rune) int {
 			toExpand = append(toExpand, p)
 		}
 	}
-
 	expanded := []int{}
 	for _, p := range toExpand {
 		fulfillNumber(&p, lines)
 		expanded = append(expanded, p.fullNumber)
-
 	}
-
 	expanded = removeDuplicateValues(expanded)
-
 	sum := 0
 	for _, number := range expanded {
 		sum += number
 	}
-
 	return sum
 }
 
