@@ -8,13 +8,9 @@ import (
 	"unicode"
 )
 
-func findSpecialChar(line []rune) (rune, int) {
-	for idx, r := range line {
-		if !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '.' {
-			return r, idx
-		}
-	}
-	return 0, -1
+type Pair struct {
+	r   rune
+	idx int
 }
 
 type Position struct {
@@ -24,8 +20,15 @@ type Position struct {
 	fullNumber int
 }
 
-type SliceType interface {
-	~string | ~int | ~float64 // add more *comparable* types as needed
+func findSpecialChars(line []rune) []Pair {
+	var pairs []Pair
+	for idx, r := range line {
+		if !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '.' {
+			pair := Pair{idx: idx, r: r}
+			pairs = append(pairs, pair)
+		}
+	}
+	return pairs
 }
 
 func removeDuplicateValues(intSlice []int) []int {
@@ -53,6 +56,7 @@ func inRange(i, j int, m [][]rune) bool {
 
 func fulfillNumber(p *Position, lines [][]rune) {
 	numberStr := []rune{}
+
 	for k := 0; ; k++ {
 		if !inRange(p.i, p.j-k, lines) {
 			break
@@ -106,7 +110,6 @@ func calcSquare(i, j int, lines [][]rune) int {
 	}
 
 	expanded = removeDuplicateValues(expanded)
-	fmt.Println(expanded)
 
 	sum := 0
 	for _, number := range expanded {
@@ -136,9 +139,9 @@ func main() {
 	}
 
 	for i, line := range lines {
-		r, j := findSpecialChar(line)
-		if r != 0 {
-			acc += calcSquare(i, j, lines)
+		pairs := findSpecialChars(line)
+		for _, pair := range pairs {
+			acc += calcSquare(i, pair.idx, lines)
 		}
 	}
 
