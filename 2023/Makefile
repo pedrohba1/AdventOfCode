@@ -10,6 +10,7 @@ run:
 	@echo "--- part 2 ---"
 	@cd $(DAY)/part2 && time go run main.go
 	@cd ../../ 
+	@echo ""
 	@echo "--- bonus ---"
 	@if [ -d "./$(DAY)/bonus" ]; then \
 		cd ./$(DAY)/bonus; \

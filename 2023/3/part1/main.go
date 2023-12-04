@@ -141,5 +141,5 @@ func main() {
 		}
 	}
 
-	fmt.Print(acc)
+	fmt.Println(acc)
 }
