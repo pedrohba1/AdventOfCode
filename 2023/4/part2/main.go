@@ -77,7 +77,6 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	copies := &CardHeap{}
 	acc := 0
 	var lines []string
 	for scanner.Scan() {
@@ -85,7 +84,7 @@ func main() {
 		lines = append(lines, line)
 	}
 
-	myMap := make(map[int]int)
+	copies := &CardHeap{}
 	for _, line := range lines {
 		card := parseCard(line)
 		wins := countDupes(card)
@@ -95,7 +94,6 @@ func main() {
 		for i := 1; i <= wins; i++ {
 			cardEarned := parseCard(lines[card.Number-1+i])
 			copies.Push(cardEarned)
-			myMap[cardEarned.Number] += 1
 			acc += 1
 		}
 
@@ -105,7 +103,6 @@ func main() {
 			for j := 1; j <= wins; j++ {
 				new := parseCard(lines[pCard.Number-1+j])
 				copies.Push(new)
-				myMap[new.Number] += 1
 				acc += 1
 			}
 		}
