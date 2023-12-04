@@ -1,33 +1,27 @@
-day1:
-	@echo "--- day 1 solution ---"
+.ONESHELL: # Applies to every targets in the file!
+
+
+run:
+	@echo "--- day $(DAY) solution ---"
 	@echo "--- part 1 ---"
-	@cd 1/part1/ && go run main.go
+	@cd $(DAY)/part1/ && time go run main.go
+	@cd ../../
 	@echo ""
 	@echo "--- part 2 ---"
-	@cd 1/part2 && go run main.go
-
-day2:
-	@echo "--- day 2 solution ---"
-	@echo "--- part 1 ---"
-	@cd 2/part1/ && go run main.go
-	@echo ""
-	@echo "--- part 2 ---"
-	@cd 2/part2 && go run main.go
-
-day3:
-	@echo "--- day 3 solution ---"
-	@echo "--- part 1 ---"
-	@cd 3/part1/ && go run main.go
-	@echo ""
-	@echo "--- part 2 ---"
-	@cd 3/part2 && go run main.go
-
-
-day4:
-	@echo "--- day 4 solution ---"
-	@echo "--- part 1 ---"
-	@cd 4/part1/ && go run main.go
-	@echo ""
-	@echo "--- part 2 ---"
-	@cd 4/part2 && go run main.go
-
+	@cd $(DAY)/part2 && time go run main.go
+	@cd ../../ 
+	@echo "--- bonus ---"
+	@if [ -d "./$(DAY)/bonus" ]; then \
+		cd ./$(DAY)/bonus; \
+		files=$$(ls **/*.go 2> /dev/null); \
+		if [ -n "$$files" ]; then \
+			for file in $$files; do \
+				time go run $$file; \
+				echo ""; \
+			done; \
+		else \
+			echo "No Go files found in $(DAY)/bonus"; \
+		fi; \
+	else \
+		echo "no bonus executions"; \
+	fi

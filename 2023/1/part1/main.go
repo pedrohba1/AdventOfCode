@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 	"unicode"
@@ -34,5 +35,5 @@ func main() {
 		acc += result
 	}
 
-	print(acc)
+	fmt.Println(acc)
 }

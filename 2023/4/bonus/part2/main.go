@@ -12,6 +12,7 @@ type Card struct {
 	Number      int
 	FirstArray  []int
 	SecondArray []int
+	amount      int
 }
 
 type CardHeap []Card
@@ -40,6 +41,7 @@ func parseCard(line string) Card {
 		Number:      cardNumber,
 		FirstArray:  firstArray,
 		SecondArray: secondArray,
+		amount:      1,
 	}
 }
 
@@ -67,6 +69,7 @@ func countDupes(c Card) int {
 }
 
 func main() {
+	fmt.Println("--- part 2 parallelized queue read ---")
 	file, err := os.Open("../input.txt")
 	defer file.Close()
 
@@ -77,38 +80,29 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	copies := &CardHeap{}
-	acc := 0
-	var lines []string
+	var cards []Card
+
 	for scanner.Scan() {
 		line := scanner.Text()
-		lines = append(lines, line)
+		card := parseCard(line)
+		cards = append(cards, card)
 	}
 
-	myMap := make(map[int]int)
-	for _, line := range lines {
-		card := parseCard(line)
+	for i, card := range cards {
 		wins := countDupes(card)
 
-		acc += 1
-
-		for i := 1; i <= wins; i++ {
-			cardEarned := parseCard(lines[card.Number-1+i])
-			copies.Push(cardEarned)
-			myMap[cardEarned.Number] += 1
-			acc += 1
-		}
-
-		for copies.Len() > 0 {
-			pCard := copies.Pop()
-			wins := countDupes(pCard)
-			for j := 1; j <= wins; j++ {
-				new := parseCard(lines[pCard.Number-1+j])
-				copies.Push(new)
-				myMap[new.Number] += 1
-				acc += 1
+		if wins > 0 {
+			for j := i + 1; j <= i+wins; j++ {
+				card := cards[j]
+				card.amount += cards[i].amount
+				cards[j] = card
 			}
 		}
+	}
+
+	acc := 0
+	for _, card := range cards {
+		acc += card.amount
 	}
 
 	fmt.Println(acc)

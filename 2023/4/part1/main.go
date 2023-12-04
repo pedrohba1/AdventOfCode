@@ -41,10 +41,10 @@ func parseNumbers(s string) []int {
 	return numbers
 }
 
-func countCommon(firstArray, secondArray []int) int {
+func countDupes(c Card) int {
 	count := 0
-	for _, num1 := range firstArray {
-		for _, num2 := range secondArray {
+	for _, num1 := range c.FirstArray {
+		for _, num2 := range c.SecondArray {
 			if num1 == num2 {
 				count++
 				break
@@ -53,6 +53,7 @@ func countCommon(firstArray, secondArray []int) int {
 	}
 	return count
 }
+
 func main() {
 	file, err := os.Open("../input.txt")
 	defer file.Close()
@@ -68,12 +69,12 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Text()
 		card := parseCardLine(line)
-		winCount := countCommon(card.SecondArray, card.FirstArray)
+		winCount := countDupes(card)
 		if winCount == 0 {
 			continue
 		}
 		acc += int(math.Pow(float64(2), float64(winCount-1)))
 	}
 
-	fmt.Print(acc)
+	fmt.Println(acc)
 }
