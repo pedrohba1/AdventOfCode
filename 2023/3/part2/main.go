@@ -4,25 +4,86 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"unicode"
 )
 
-func findSpecialChar(line []rune) (rune, int) {
-	for idx, r := range line {
-		if !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '.' {
-			return r, idx
-		}
-	}
-	return 0, -1
+type Pair struct {
+	r   rune
+	idx int
 }
 
 type Position struct {
-	i int
-	j int
-	r rune
+	i          int
+	j          int
+	r          rune
+	fullNumber int
 }
 
-func checkSurroundings(i, j int, lines [][]rune) int {
+func findGear(line []rune) []Pair {
+	var pairs []Pair
+	for idx, r := range line {
+		if r == '*' {
+			pair := Pair{idx: idx, r: r}
+			pairs = append(pairs, pair)
+		}
+	}
+	return pairs
+}
+
+func removeDuplicateValues(intSlice []int) []int {
+	keys := make(map[int]bool)
+	list := []int{}
+
+	for _, entry := range intSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
+}
+
+func inRange(i, j int, m [][]rune) bool {
+	if i < 0 || i >= len(m) {
+		return false
+	}
+	if j < 0 || j >= len(m[i]) {
+		return false
+	}
+	return true
+}
+
+func fulfillNumber(p *Position, lines [][]rune) {
+	numberStr := []rune{}
+
+	for k := 0; ; k++ {
+		if !inRange(p.i, p.j-k, lines) {
+			break
+		}
+		r := lines[p.i][p.j-k]
+		if !unicode.IsDigit(r) {
+			break
+		}
+		numberStr = append([]rune{r}, numberStr...)
+	}
+
+	for k := 1; ; k++ {
+		if !inRange(p.i, p.j+k, lines) {
+			break
+		}
+		r := lines[p.i][p.j+k]
+		if !unicode.IsDigit(r) {
+			break
+		}
+		numberStr = append(numberStr, r)
+	}
+	res, _ := strconv.Atoi(string(numberStr))
+
+	*&p.fullNumber = res
+}
+
+func calcSquare(i, j int, lines [][]rune) int {
 
 	var toExpand []Position
 	for _, p := range []Position{
@@ -40,7 +101,24 @@ func checkSurroundings(i, j int, lines [][]rune) int {
 		}
 	}
 
-	return 0
+	expanded := []int{}
+	for _, p := range toExpand {
+		fulfillNumber(&p, lines)
+		expanded = append(expanded, p.fullNumber)
+
+	}
+
+	expanded = removeDuplicateValues(expanded)
+
+	mul := 1
+	if len(expanded) == 1 {
+		return 0
+	}
+	for _, number := range expanded {
+		mul *= number
+	}
+
+	return mul
 }
 
 func main() {
@@ -63,11 +141,11 @@ func main() {
 	}
 
 	for i, line := range lines {
-		r, j := findSpecialChar(line)
-		if r != 0 {
-			checkSurroundings(i, j, lines)
+		pairs := findGear(line)
+		for _, pair := range pairs {
+			acc += calcSquare(i, pair.idx, lines)
 		}
 	}
 
-	fmt.Println(acc)
+	fmt.Print(acc)
 }
