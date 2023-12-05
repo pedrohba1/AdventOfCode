@@ -53,7 +53,7 @@ func parseNumbers(s string) []int {
 	return numbers
 }
 
-func countDupes(c Card) int {
+func countWins(c Card) int {
 	count := 0
 	for _, num1 := range c.FirstArray {
 		for _, num2 := range c.SecondArray {
@@ -87,7 +87,7 @@ func main() {
 	copies := &CardHeap{}
 	for _, line := range lines {
 		card := parseCard(line)
-		wins := countDupes(card)
+		wins := countWins(card)
 
 		acc += 1
 
@@ -99,7 +99,7 @@ func main() {
 
 		for copies.Len() > 0 {
 			pCard := copies.Pop()
-			wins := countDupes(pCard)
+			wins := countWins(pCard)
 			for j := 1; j <= wins; j++ {
 				new := parseCard(lines[pCard.Number-1+j])
 				copies.Push(new)

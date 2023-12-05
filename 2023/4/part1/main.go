@@ -10,12 +10,12 @@ import (
 )
 
 type Card struct {
-	Number      int
-	FirstArray  []int
-	SecondArray []int
+	Number         int
+	WinningNumbers []int
+	MyNumbers      []int
 }
 
-func parseCardLine(line string) Card {
+func parseCard(line string) Card {
 	parts := strings.SplitN(line, ":", 2)
 	cardNumber, _ := strconv.Atoi(strings.TrimSpace(parts[0][4:]))
 
@@ -25,9 +25,9 @@ func parseCardLine(line string) Card {
 	secondArray := parseNumbers(numberParts[1])
 
 	return Card{
-		Number:      cardNumber,
-		FirstArray:  firstArray,
-		SecondArray: secondArray,
+		Number:         cardNumber,
+		WinningNumbers: firstArray,
+		MyNumbers:      secondArray,
 	}
 }
 
@@ -41,10 +41,10 @@ func parseNumbers(s string) []int {
 	return numbers
 }
 
-func countDupes(c Card) int {
+func countWins(c Card) int {
 	count := 0
-	for _, num1 := range c.FirstArray {
-		for _, num2 := range c.SecondArray {
+	for _, num1 := range c.WinningNumbers {
+		for _, num2 := range c.MyNumbers {
 			if num1 == num2 {
 				count++
 				break
@@ -68,8 +68,8 @@ func main() {
 	acc := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		card := parseCardLine(line)
-		winCount := countDupes(card)
+		card := parseCard(line)
+		winCount := countWins(card)
 		if winCount == 0 {
 			continue
 		}
