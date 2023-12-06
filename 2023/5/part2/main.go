@@ -3,9 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -14,13 +14,13 @@ type AgroMap struct {
 	matrix [][]int
 }
 
-func (a AgroMap) findDest(val int) int {
+func (a AgroMap) findSrc(val int) int {
 	for i := 0; i < len(a.matrix); i++ {
 		rg := a.matrix[i][2]
 		source := a.matrix[i][1]
 		end := a.matrix[i][0]
-		if val >= source && val <= source+rg {
-			return (val - source) + end
+		if val >= end && val <= end+rg {
+			return (val - end) + source
 		}
 	}
 	return val
@@ -38,8 +38,22 @@ func parseSeeds(line string) []int {
 	}
 	return integers
 }
+
+type Loc struct {
+	val   int
+	shift int
+}
+
+func InsertSorted(s []Loc, e Loc) []Loc {
+	i := sort.Search(len(s), func(i int) bool { return s[i].val > e.val })
+	s = append(s, Loc{}) // Append an empty struct
+	copy(s[i+1:], s[i:])
+	s[i] = e
+	return s
+}
+
 func main() {
-	file, err := os.Open("../example.txt")
+	file, err := os.Open("../input.txt")
 	defer file.Close()
 
 	if err != nil {
@@ -87,31 +101,31 @@ func main() {
 		}
 	}
 
-	// acc := 0
-	var allSeeds []int
-	for i, seed := range seeds {
-		if i%2 == 0 {
-			for j := 0; j <= seed+seeds[i+1]; j++ {
-				allSeeds = append(allSeeds, seed+j)
+	var locRanges []Loc
+	for _, mp := range agroMaps["humidity-to-location"].matrix {
+		locRanges = InsertSorted(locRanges, Loc{val: mp[0], shift: mp[2]})
+	}
+	// fmt.Println(locRanges)
+
+	for loc := 0; loc <= locRanges[len(locRanges)-1].val; loc++ {
+		// fmt.Println("loc", loc)
+
+		humidity := agroMaps["humidity-to-location"].findSrc(loc)
+		temp := agroMaps["temperature-to-humidity"].findSrc(humidity)
+		light := agroMaps["light-to-temperature"].findSrc(temp)
+		water := agroMaps["water-to-light"].findSrc(light)
+		fert := agroMaps["fertilizer-to-water"].findSrc(water)
+		soil := agroMaps["soil-to-fertilizer"].findSrc(fert)
+		seed := agroMaps["seed-to-soil"].findSrc(soil)
+
+		for k := 0; k < len(seeds)-1; k++ {
+
+			if k%2 == 0 && seed >= seeds[k] && seed <= seeds[k]+seeds[k+1]-1 {
+				fmt.Println(loc) //99751241
+				return
 			}
 		}
 	}
-	fmt.Println(allSeeds)
 
-	fmt.Println("seeds: ", allSeeds)
-	finalLocation := math.MaxInt64
-	for _, seed := range seeds {
-		soil := agroMaps["seed-to-soil"].findDest(seed)
-		fert := agroMaps["soil-to-fertilizer"].findDest(soil)
-		water := agroMaps["fertilizer-to-water"].findDest(fert)
-		light := agroMaps["water-to-light"].findDest(water)
-		temp := agroMaps["light-to-temperature"].findDest(light)
-		humidity := agroMaps["temperature-to-humidity"].findDest(temp)
-		location := agroMaps["humidity-to-location"].findDest(humidity)
-		if location < finalLocation {
-			finalLocation = location
-		}
-	}
-
-	fmt.Println(finalLocation)
+	// fmt.Println(finalLoc)
 }
