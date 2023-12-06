@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"regexp"
 	"strconv"
@@ -11,6 +12,18 @@ import (
 
 type AgroMap struct {
 	matrix [][]int
+}
+
+func (a AgroMap) findDest(val int) int {
+	for i := 0; i < len(a.matrix); i++ {
+		rg := a.matrix[i][2]
+		source := a.matrix[i][1]
+		end := a.matrix[i][0]
+		if val >= source && val <= source+rg {
+			return (val - source) + end
+		}
+	}
+	return val
 }
 
 func parseSeeds(line string) []int {
@@ -26,7 +39,7 @@ func parseSeeds(line string) []int {
 	return integers
 }
 func main() {
-	file, err := os.Open("../example.txt")
+	file, err := os.Open("../input.txt")
 	defer file.Close()
 
 	if err != nil {
@@ -74,7 +87,19 @@ func main() {
 		}
 	}
 
-	// acc := 0
-	//
-	fmt.Println(seeds)
+	finalLocation := math.MaxInt64
+	for _, seed := range seeds {
+		soil := agroMaps["seed-to-soil"].findDest(seed)
+		fert := agroMaps["soil-to-fertilizer"].findDest(soil)
+		water := agroMaps["fertilizer-to-water"].findDest(fert)
+		light := agroMaps["water-to-light"].findDest(water)
+		temp := agroMaps["light-to-temperature"].findDest(light)
+		humidity := agroMaps["temperature-to-humidity"].findDest(temp)
+		location := agroMaps["humidity-to-location"].findDest(humidity)
+		if location < finalLocation {
+			finalLocation = location
+		}
+	}
+
+	fmt.Println(finalLocation)
 }
