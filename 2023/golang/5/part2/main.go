@@ -116,8 +116,7 @@ func main() {
 	// stop checking map ranges, modify the seed range,
 	//  split it once below, once above,
 	// or even both below and above. Make sure to update the upper part of the seed range so the next map range can work with it.
-	// visual explanation on https://old.reddit.com/r/adventofcode/comments/18b9ohu/2023_day_5_animated_part_2_example/kc2ybz6/
-
+	// visual explanation on https://www.reddit.com/r/adventofcode/comments/18b9ohu/comment/kc2ybz6/
 	//pseudo code:
 
 	// for each remap in the game
