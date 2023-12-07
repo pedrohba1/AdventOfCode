@@ -107,6 +107,34 @@ func main() {
 	}
 	// fmt.Println(locRanges)
 
+	//TODO: OPTMIZE
+	// 	store your seed maps as ranges
+	// when part of a range gets mapped to something new, slice out the old part of the range and create a new mapped range
+	// Easy: just brute force it if your code is fast.
+	// Hard: Sort the maps by source in normal ascending order.
+	//  There are six cases you need to consider to either do nothing,
+	// stop checking map ranges, modify the seed range,
+	//  split it once below, once above,
+	// or even both below and above. Make sure to update the upper part of the seed range so the next map range can work with it.
+	// visual explanation on https://old.reddit.com/r/adventofcode/comments/18b9ohu/2023_day_5_animated_part_2_example/kc2ybz6/
+
+	//pseudo code:
+
+	// for each remap in the game
+	// for each remap segment
+	//     new domain <- []
+	//     for each domain segment
+	//         compute overlap (between remap segment and domain segment) and remainder (of domain segment)
+	//         add overlap (with remap segment's offset) and remainder (zero offset) to new domain
+	//     domain <- new domain
+	// apply offsets to domain
+
+	// 	// another explanation
+	// 	if you have seeds 1-4 (1,2,3,4),
+	// and your map says seeds 3-9 (3,4,5,6,7,8,9) should turn into soil 13-19 (13,14,15,16,17,18,19),
+	// then you now have a soil range of 13-14 (seeds 3,4 get turned into 13,14),
+	// and a seed range of 1-2 (these did not get turned into soil).
+
 	for loc := 0; loc <= locRanges[len(locRanges)-1].val; loc++ {
 		// fmt.Println("loc", loc)
 
